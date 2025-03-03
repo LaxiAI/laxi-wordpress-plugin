@@ -2,7 +2,7 @@
 Contributors: laxiai
 Tags: woocommerce, ai, chatbot, customer support, product recommendations
 Requires at least: 5.6
-Tested up to: 6.4
+Tested up to: 6.7
 Stable tag: 1.0.0
 Requires PHP: 7.2
 License: GPLv3 or later
