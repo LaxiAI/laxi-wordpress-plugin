@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for WordPress admin integration */
+#laxi-admin-root {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Brand Colors and Variables */
+:root {
+    --laxi-primary: #6e51e0;
+    --laxi-primary-dark: #5842b3;
+    --laxi-primary-light: #8c74e6;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --background: #f9fafb;
+    --success: #22c55e;
+    --error: #ef4444;
+    --border: #e5e7eb;
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-primary);
+    background: var(--background);
+    line-height: 1.5;
+}
+
+/* Header with Logo */
+.laxi-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.laxi-logo {
+    height: 2.5rem;
+    width: auto;
+}
+
+/* Auth Button */
+.laxi-auth-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--laxi-primary);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.laxi-auth-button:hover {
+    background: var(--laxi-primary-dark);
+    transform: translateY(-1px);
+}
+
+.laxi-auth-button:active {
+    transform: translateY(0);
+}
+
+/* Step Guide */
+.step-container {
+    display: grid;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.step-item {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.step-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: var(--laxi-primary);
+    color: white;
+    border-radius: 50%;
+    font-weight: 600;
+}
+
+.step-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Status Indicators */
+.status-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+}
+
+.status-complete {
+    color: var(--success);
+}
+
+.status-pending {
+    color: var(--text-secondary);
+}
+
+/* Toggle Switch Customization */
+.laxi-switch {
+    --switch-width: 3rem;
+    --switch-height: 1.75rem;
+    --switch-padding: 0.125rem;
+
+    position: relative;
+    width: var(--switch-width);
+    height: var(--switch-height);
+    background-color: var(--border);
+    border-radius: 999px;
+    transition: all 0.2s ease;
+}
+
+.laxi-switch[data-state="checked"] {
+    background-color: var(--laxi-primary);
+}
+
+.laxi-switch-thumb {
+    width: calc(var(--switch-height) - 2 * var(--switch-padding));
+    height: calc(var(--switch-height) - 2 * var(--switch-padding));
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.laxi-switch[data-state="checked"] .laxi-switch-thumb {
+    transform: translateX(calc(var(--switch-width) - var(--switch-height)));
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    #laxi-admin-root {
+        margin: 1rem;
+        padding: 0;
+    }
+
+    .laxi-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .step-item {
+        padding: 1rem;
+    }
+}
