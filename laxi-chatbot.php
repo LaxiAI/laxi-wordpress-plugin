@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Laxi AI for WooCommerce
- * Plugin URI: https://laxi.ai
+ * Plugin URI: https://github.com/LaxiAI/laxi-wordpress-plugin
  * Description: Integrate laxi.ai chatbots with your WooCommerce store
  * Version: 1.0.0
  * Author: laxi.ai Team
@@ -10,8 +10,10 @@
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.0
  * Requires PHP: 7.2
+ * Requires Plugins: woocommerce/woocommerce.php
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * GitHub Plugin URI: https://github.com/LaxiAI/laxi-wordpress-plugin
  */
 
 if (!defined('ABSPATH')) exit;
@@ -116,27 +118,43 @@ class Laxi_Ai_Integration {
         wp_send_json_success($body);
     }
 
+    /**
+     * Register and enqueue the chatbot script properly
+     */
     public function inject_chatbot_script() {
-        ?>
-        <script>
-            document.addEventListener("DOMContentLoaded", async function() {
-                const shopUrl = "<?php echo esc_js(urlencode(urlencode(get_site_url()))); ?>";
-                const apiUrl = `<?php echo esc_js(self::CHATBOT_URL); ?>/v1/frontend/woocommerce/script/${shopUrl}`;
+        // Register the script handler first
+        wp_register_script(
+            'laxi-chatbot-loader',
+            '',  // Empty URL because we'll use inline script
+            [],  // No dependencies
+            '1.0.0',
+            true  // Load in footer
+        );
 
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) return;
+        // Enqueue the script
+        wp_enqueue_script('laxi-chatbot-loader');
 
-                    const scriptText = await response.text();
-                    const scriptElement = document.createElement("script");
+        // Add the inline JavaScript that will fetch and execute the chatbot script
+        $inline_script = "
+            const shopUrl = '" . esc_js(urlencode(urlencode(get_site_url()))) . "';
+            const apiUrl = '" . esc_js(self::CHATBOT_URL) . "/v1/frontend/woocommerce/script/' + shopUrl;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to load Laxi chatbot');
+                    return response.text();
+                })
+                .then(scriptText => {
+                    const scriptElement = document.createElement('script');
                     scriptElement.textContent = scriptText;
                     document.body.appendChild(scriptElement);
-                } catch (error) {
-                    console.error("Laxi.ai Error:", error);
-                }
-            });
-        </script>
-        <?php
+                })
+                .catch(error => {
+                    console.error('Laxi.ai Error:', error);
+                });
+        ";
+
+        wp_add_inline_script('laxi-chatbot-loader', $inline_script, 'after');
     }
 
     public function generate_auth_url() {
