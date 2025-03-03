@@ -1,0 +1,120 @@
+# WordPress specific files and directories
+wp-admin/
+wp-includes/
+wp-content/index.php
+wp-content/languages
+wp-content/plugins/index.php
+wp-content/themes/index.php
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/mu-plugins/
+.htaccess
+
+# WordPress configuration file
+wp-config.php
+
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnp
+.pnp.js
+
+# React build folder
+build/
+dist/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+.komodotools/
+.eclipse/
+.settings/
+.project
+.buildpath
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*~.nib
+local.properties
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+.jest/
+__tests__/__snapshots__/
+
+# Build tools specific
+.grunt/
+.webpack/
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
+
+# Composer
+/vendor/
+/composer.lock
+
+# WordPress plugin specific
+# Uncomment the next line if you want to exclude the compiled JS
+# assets/js/dist/
+
+# Package files
+*.zip
+*.tar.gz
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+
+# Database files
+*.sql
+*.sqlite
+
+# Dependency directories for WordPress (if using Composer)
+/vendor/
+
+# PHP CodeSniffer
+.phpcs.xml
+phpcs.xml
+.phpcs.xml.dist
+phpcs.xml.dist
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+
+# Webpack
+webpack.generated.js
+
+# Babel compiled files (if not using Webpack for this)
+lib/
