@@ -1,5 +1,5 @@
 === Laxi AI for WooCommerce ===
-Contributors: laxiai
+Contributors: laxi
 Tags: woocommerce, ai, chatbot, customer support, product recommendations
 Requires at least: 5.6
 Tested up to: 6.7
