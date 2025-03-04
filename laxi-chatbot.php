@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: laxi.ai
+ * Plugin Name: Laxi AI for WooCommerce
  * Plugin URI: https://github.com/LaxiAI/laxi-wordpress-plugin
  * Description: Integrate laxi.ai chatbots with your WooCommerce store
  * Version: 1.0.0
