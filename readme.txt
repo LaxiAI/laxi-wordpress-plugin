@@ -7,6 +7,7 @@ Stable tag: 1.0.0
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Plugin URI: https://github.com/LaxiAI/laxi-wordpress-plugin
 
 Integrate AI-powered chatbots with your WooCommerce store to provide instant customer support and product recommendations.
 
