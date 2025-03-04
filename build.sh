@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set variables
-PLUGIN_SLUG="laxi-ai-for-woocommerce"
+PLUGIN_SLUG="laxi-ai"
 BUILD_DIR="./dist/$PLUGIN_SLUG"
 
 # Clean previous build

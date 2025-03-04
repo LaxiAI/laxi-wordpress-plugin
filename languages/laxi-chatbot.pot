@@ -2,8 +2,8 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Laxi AI for WooCommerce 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/laxi-ai-for-woocommerce\n"
+"Project-Id-Version: laxi.ai 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/laxi-ai\n"
 "POT-Creation-Date: 2024-02-22\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,5 +30,5 @@ msgid "Failed to create API key: %s"
 msgstr ""
 
 #: laxi-chatbot.php:301
-msgid "Laxi AI requires WooCommerce to be installed and active."
+msgid "laxi.ai requires WooCommerce to be installed and active."
 msgstr ""

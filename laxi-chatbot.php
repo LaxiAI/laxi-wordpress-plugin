@@ -1,18 +1,18 @@
 <?php
 /**
- * Plugin Name: Laxi AI for WooCommerce
+ * Plugin Name: laxi.ai
  * Plugin URI: https://github.com/LaxiAI/laxi-wordpress-plugin
  * Description: Integrate laxi.ai chatbots with your WooCommerce store
  * Version: 1.0.0
  * Author: laxi.ai Team
- * Text Domain: laxi-ai-for-woocommerce
+ * Text Domain: laxi-ai
  * Domain Path: /languages
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.0
  * Requires PHP: 7.2
  * Requires at least: 5.6
  * Tested up to: 6.7
- * Requires: woocommerce
+ * Requires Plugins: woocommerce
  * License: GPL v3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * GitHub Plugin URI: https://github.com/LaxiAI/laxi-wordpress-plugin
@@ -23,10 +23,7 @@ if (!defined('ABSPATH')) exit;
 class Laxi_Ai_Integration {
     private const PLUGIN_KEY = 'xDOvESCE2QfM5fzfRtUcyYOH1Rts38u9CwIiy6Z9XfGmuLZvFOgI8pBHK5wLuGe0';
     private const PLATFORM_URL = 'https://laxi.ai';
-//    private const PLATFORM_URL = 'http://localhost:5173';
-
     private const CHATBOT_URL = 'https://laxi-configurator-runner-843713389587.europe-west1.run.app';
-//    private const CHATBOT_URL = 'http://127.0.0.1:8080';
 
     public function __construct() {
         // Admin hooks
@@ -76,7 +73,7 @@ class Laxi_Ai_Integration {
             'Laxi AI',
             'Laxi AI',
             'manage_options',
-            'laxi-ai-for-woocommerce',
+            'laxi-ai',
             [$this, 'render_admin_page'],
             'dashicons-format-chat'
         );
@@ -200,13 +197,13 @@ class Laxi_Ai_Integration {
 
         // Check if user has required capabilities
         if (!user_can($user_id, 'manage_woocommerce')) {
-            return new WP_Error('invalid-user', __('User does not have required capabilities', 'laxi-ai-for-woocommerce'));
+            return new WP_Error('invalid-user', __('User does not have required capabilities', 'laxi-ai'));
         }
 
         try {
             // Generate description with timestamp for uniqueness
             /* translators: %s: Current timestamp when the API key was created */
-            $description = sprintf(__('Laxi AI Integration - Created %s', 'laxi-ai-for-woocommerce'),current_time('mysql'));
+            $description = sprintf(__('laxi.ai Integration - Created %s', 'laxi-ai'),current_time('mysql'));
 
             // Create API key data
             $key_data = [
@@ -234,7 +231,7 @@ class Laxi_Ai_Integration {
 
         } catch (Exception $e) {
             /* translators: %s: Error message from the API key creation process */
-            return new WP_Error('api-key-error',sprintf(__('Failed to create API key: %s', 'laxi-ai-for-woocommerce'),$e->getMessage()));
+            return new WP_Error('api-key-error',sprintf(__('Failed to create API key: %s', 'laxi-ai'),$e->getMessage()));
         }
     }
 
@@ -249,7 +246,7 @@ class Laxi_Ai_Integration {
             } catch (Exception $e) {
                 if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
                     /* translators: 1: API Key ID that failed to be cleaned up, 2: Error message from the cleanup process */
-                    $message = sprintf(__('Laxi AI: Failed to cleanup existing API key (ID: %1$d): %2$s', 'laxi-ai-for-woocommerce'),$existing_key_id,$e->getMessage());
+                    $message = sprintf(__('Laxi AI: Failed to cleanup existing API key (ID: %1$d): %2$s', 'laxi-ai'),$existing_key_id,$e->getMessage());
                 }
             }
         }

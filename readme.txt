@@ -24,7 +24,7 @@ Laxi AI for WooCommerce adds an intelligent chatbot to your online store, helpin
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/laxi-ai-for-woocommerce` directory, or install the plugin through the WordPress plugins screen.
+1. Upload the plugin files to the `/wp-content/plugins/laxi-ai` directory, or install the plugin through the WordPress plugins screen.
 2. Activate the plugin through the 'Plugins' screen in WordPress.
 3. Use the Laxi AI menu item to configure the plugin and connect to your Laxi account.
 
@@ -105,8 +105,8 @@ This plugin connects to the Laxi AI platform to provide AI-powered chatbot funct
 
 The plugin transmits data to the following services:
 
-* **https://laxi.ai** - Main service for account management and chatbot configuration
-* **https://laxi-configurator-runner-843713389587.europe-west1.run.app** - API service for chatbot functionality and WooCommerce integration
+* https://laxi.ai - Main service for account management and chatbot configuration
+* https://laxi-configurator-runner-843713389587.europe-west1.run.app - API service for chatbot functionality and WooCommerce integration
 
 The following data may be transmitted:
 * Your site URL and store name
