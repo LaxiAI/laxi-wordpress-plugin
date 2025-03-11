@@ -159,16 +159,46 @@ class Laxi_Ai_Integration {
         wp_add_inline_script('laxi-chatbot-loader', $inline_script, 'after');
     }
 
-    public function generate_auth_url() {
-        $api_keys = $this->create_wc_api_keys(get_current_user_id());
+    /**
+     * Fallback implementation of wc_api_hash if the function is not available
+     *
+     * @param string $data Plain text to hash
+     * @return string Hashed data
+     */
+    private function fallback_api_hash($data) {
+        // This replicates WooCommerce's hashing for API keys
+        $salt = wp_salt('auth');
+        return hash_hmac('sha256', $data, $salt);
+    }
 
-        if (is_wp_error($api_keys)) {
-            return false;
-        }
+    /**
+     * Generate auth URL and create API keys using WooCommerce's proper hooks and functions
+     */
+    public function generate_auth_url() {
+        // Clean up any existing keys first
+        $this->cleanup_existing_keys();
 
         $current_user = wp_get_current_user();
-        $timestamp = time();
+        $user_id = get_current_user_id();
 
+        // Check if user has required capabilities
+        if (!user_can($user_id, 'manage_woocommerce')) {
+            wp_send_json_error(array('message' => __('User does not have required capabilities', 'laxi-ai-for-woocommerce')));
+            return;
+        }
+
+        // Generate description with timestamp for uniqueness
+        $description = sprintf(__('laxi.ai Integration - Created %s', 'laxi-ai-for-woocommerce'), current_time('mysql'));
+
+        // Create API keys using proper WooCommerce function
+        $api_keys = $this->create_wc_api_keys_proper($user_id, $description);
+
+        if (is_wp_error($api_keys)) {
+            wp_send_json_error(array('message' => 'Failed to create API keys: ' . $api_keys->get_error_message()));
+            return;
+        }
+
+        $timestamp = time();
         $blog_name = get_bloginfo('name');
 
         // Build auth parameters
@@ -194,63 +224,134 @@ class Laxi_Ai_Integration {
         wp_send_json_success($auth_url);
     }
 
-    private function create_wc_api_keys($user_id) {
-        // Clean up any existing keys first
-        $this->cleanup_existing_keys();
-
-        // Check if user has required capabilities
-        if (!user_can($user_id, 'manage_woocommerce')) {
-            return new WP_Error('invalid-user', __('User does not have required capabilities', 'laxi-ai-for-woocommerce'));
+   /**
+     * Create WooCommerce API keys using proper functions with fallbacks
+     *
+     * @param int $user_id User ID for whom to create the API keys
+     * @param string $description Description for the API key
+     * @return array|WP_Error The created API keys or error
+     */
+    private function create_wc_api_keys_proper($user_id, $description) {
+        // Ensure WooCommerce is active
+        if (!function_exists('WC')) {
+            return new WP_Error('woocommerce-inactive', __('WooCommerce must be active to create API keys', 'laxi-ai-for-woocommerce'));
         }
 
-        try {
-            // Generate description with timestamp for uniqueness
-            /* translators: %s: Current timestamp when the API key was created */
-            $description = sprintf(__('laxi.ai Integration - Created %s', 'laxi-ai-for-woocommerce'),current_time('mysql'));
-
-            // Create API key data
-            $key_data = [
-                'user_id'      => $user_id,
-                'description'  => $description,
-                'permissions'  => 'read',
-                'app_name'     => 'Laxi AI'
-            ];
-
-            // Use WooCommerce's API Key Manager
-            $api_key = WC_API_Keys::create_key($key_data);
-
-            if (is_wp_error($api_key)) {
-                return $api_key;
+        // First try to include the necessary WooCommerce API files
+        if (!function_exists('wc_create_api_key')) {
+            if (file_exists(WP_PLUGIN_DIR . '/woocommerce/includes/wc-api-functions.php')) {
+                include_once WP_PLUGIN_DIR . '/woocommerce/includes/wc-api-functions.php';
             }
 
-            // Store the key ID for future reference
-            update_option('laxi_wc_api_key_id', $api_key['key_id'], false);
-
-            return [
-                'key_id'          => $api_key['key_id'],
-                'consumer_key'    => $api_key['consumer_key'],
-                'consumer_secret' => $api_key['consumer_secret']
-            ];
-
-        } catch (Exception $e) {
-            /* translators: %s: Error message from the API key creation process */
-            return new WP_Error('api-key-error',sprintf(__('Failed to create API key: %s', 'laxi-ai-for-woocommerce'),$e->getMessage()));
+            // Also include admin functions which might be needed
+            if (file_exists(WP_PLUGIN_DIR . '/woocommerce/includes/admin/wc-admin-functions.php')) {
+                include_once WP_PLUGIN_DIR . '/woocommerce/includes/admin/wc-admin-functions.php';
+            }
         }
+
+        // Check again if the function exists after including files
+        if (function_exists('wc_create_api_key')) {
+            // Generate a random key and secret
+            $consumer_key = 'ck_' . wc_rand_hash();
+            $consumer_secret = 'cs_' . wc_rand_hash();
+
+            // Create the API key using WooCommerce's function
+            $key_id = wc_create_api_key(
+                $user_id,
+                $description,
+                'read',
+                $consumer_key,
+                $consumer_secret
+            );
+
+            if (!$key_id || is_wp_error($key_id)) {
+                if (is_wp_error($key_id)) {
+                    return $key_id;
+                }
+                return new WP_Error('api-key-error', __('Failed to create API key', 'laxi-ai-for-woocommerce'));
+            }
+
+            $response = array(
+                'key_id' => $key_id,
+                'consumer_key' => $consumer_key,
+                'consumer_secret' => $consumer_secret
+            );
+        } else {
+            // Fallback method using direct database access if wc_create_api_key isn't available
+            global $wpdb;
+
+            // Generate a random key and secret
+            if (function_exists('wc_rand_hash')) {
+                $consumer_key = 'ck_' . wc_rand_hash();
+                $consumer_secret = 'cs_' . wc_rand_hash();
+            } else {
+                // Even more basic fallback if wc_rand_hash doesn't exist
+                $consumer_key = 'ck_' . wp_generate_password(12, false);
+                $consumer_secret = 'cs_' . wp_generate_password(32, false);
+            }
+
+            // Insert the new API key into the database
+            $wpdb->insert(
+                $wpdb->prefix . 'woocommerce_api_keys',
+                array(
+                    'user_id'         => $user_id,
+                    'description'     => $description,
+                    'permissions'     => 'read',
+                    'consumer_key'    => function_exists('wc_api_hash') ? wc_api_hash($consumer_key) : $this->fallback_api_hash($consumer_key),
+                    'consumer_secret' => $consumer_secret,
+                    'truncated_key'   => substr($consumer_key, -7),
+                    'last_access'     => null
+                ),
+                array(
+                    '%d',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s',
+                    '%s'
+                )
+            );
+
+            $key_id = $wpdb->insert_id;
+
+            if (!$key_id) {
+                return new WP_Error('api-key-error', __('Failed to create API key in database', 'laxi-ai-for-woocommerce'));
+            }
+
+            $response = array(
+                'key_id' => $key_id,
+                'consumer_key' => $consumer_key,
+                'consumer_secret' => $consumer_secret
+            );
+        }
+
+        // Store the key ID for future reference
+        update_option('laxi_wc_api_key_id', $response['key_id'], false);
+
+        return $response;
     }
 
+    /**
+     * Clean up existing API keys using proper WooCommerce functions
+     */
     private function cleanup_existing_keys() {
         $existing_key_id = get_option('laxi_wc_api_key_id');
 
         if ($existing_key_id) {
-            try {
-                // Use WooCommerce's API to revoke the key
-                WC_API_Keys::remove_key($existing_key_id);
+            // Use the WooCommerce function to delete API keys if available
+            if (function_exists('wc_delete_api_key')) {
+                wc_delete_api_key($existing_key_id);
                 delete_option('laxi_wc_api_key_id');
-            } catch (Exception $e) {
-                if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
-                    /* translators: 1: API Key ID that failed to be cleaned up, 2: Error message from the cleanup process */
-                    $message = sprintf(__('Laxi AI: Failed to cleanup existing API key (ID: %1$d): %2$s', 'laxi-ai-for-woocommerce'),$existing_key_id,$e->getMessage());
-                }
+            } else {
+                // Fallback to WordPress functions
+                global $wpdb;
+                $wpdb->delete(
+                    $wpdb->prefix . 'woocommerce_api_keys',
+                    array('key_id' => $existing_key_id),
+                    array('%d')
+                );
+                delete_option('laxi_wc_api_key_id');
             }
         }
     }
