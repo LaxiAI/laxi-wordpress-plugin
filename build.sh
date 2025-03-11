@@ -22,6 +22,9 @@ echo "<?php // Silence is golden" > $BUILD_DIR/assets/js/index.php
 # Copy plugin files
 cp ./assets/js/admin.js $BUILD_DIR/assets/js/
 
+# Copy logo
+cp ./assets/logo.svg $BUILD_DIR/assets/logo.svg
+
 # Copy and rename screenshots for WordPress.org
 cp ./assets/screenshot-1.png $BUILD_DIR/assets/screenshot-1.png
 cp ./assets/screenshot-2.png $BUILD_DIR/assets/screenshot-2.png

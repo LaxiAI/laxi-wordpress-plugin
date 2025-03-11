@@ -39,8 +39,10 @@ class Laxi_Ai_Integration {
         }
     }
 
+
+
     public function enqueue_admin_scripts($hook) {
-        if ('toplevel_page_laxi-chatbot' !== $hook) {
+        if ('toplevel_page_laxi-ai-for-woocommerce' !== $hook) {
             return;
         }
 
@@ -64,7 +66,8 @@ class Laxi_Ai_Integration {
             'chatbotUrl' => self::CHATBOT_URL,
             'shopUrl' => urlencode(urlencode(get_site_url())),
             'plainUrl' => get_site_url(),
-            'ajaxUrl' => admin_url('admin-ajax.php')
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'pluginUrl' => plugin_dir_url(__FILE__)
         ));
     }
 

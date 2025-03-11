@@ -23,18 +23,9 @@ const AdminInterface = () => {
                 })
             });
             const data = await response.json();
-            console.log("Status result", data)
             if (data.success) {
                 setStatus(data.data);
             }
-            // const response = await fetch(`${laxiData.chatbotUrl}/v1/frontend/woocommerce/status/${laxiData.shopUrl}`, {
-            //     method: 'GET',
-            //     headers: {
-            //         'X-Shop-Domain': laxiData.plainUrl
-            //     }
-            // });
-            // const data = await response.json();
-            // setStatus(data);
         } catch (error) {
             console.error('Failed to check status:', error);
         }
@@ -117,12 +108,13 @@ const AdminInterface = () => {
     ];
 
     const allComplete = Object.values(status).every(value => value === true);
+    const logoPath = `${laxiData.pluginUrl}assets/logo.svg`;
 
     return (
         <div>
             <header className="laxi-header">
                 <img
-                    src= '../../../assets/logo.svg'
+                    src={logoPath}
                     alt="Laxi.ai"
                     className="laxi-logo"
                 />
