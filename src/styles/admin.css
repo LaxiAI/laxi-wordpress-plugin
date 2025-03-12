@@ -11,15 +11,16 @@
 
 /* Brand Colors and Variables */
 :root {
-    --laxi-primary: #6e51e0;
-    --laxi-primary-dark: #5842b3;
-    --laxi-primary-light: #8c74e6;
+    --laxi-primary: #6D51E0;
+    --laxi-primary-dark: #6D51E0;
+    --laxi-primary-light: #6D51E0;
     --text-primary: #1a1a1a;
     --text-secondary: #666666;
     --background: #f9fafb;
     --success: #22c55e;
     --error: #ef4444;
     --border: #e5e7eb;
+    --disabled: #d1d5db;
 }
 
 /* Reset and Base Styles */
@@ -65,15 +66,27 @@ body {
     font-weight: 600;
     text-decoration: none;
     transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
 }
 
-.laxi-auth-button:hover {
+.laxi-auth-button:hover:not(.laxi-button-disabled) {
     background: var(--laxi-primary-dark);
     transform: translateY(-1px);
 }
 
-.laxi-auth-button:active {
+.laxi-auth-button:active:not(.laxi-button-disabled) {
     transform: translateY(0);
+}
+
+/* Disabled Button Styles */
+.laxi-button-disabled {
+    background: var(--disabled);
+    color: #9ca3af;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none;
+    opacity: 0.7;
 }
 
 /* Step Guide */

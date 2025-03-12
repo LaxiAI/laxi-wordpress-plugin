@@ -87,6 +87,7 @@ const AdminInterface = () => {
             description: 'Link your store to enable AI-powered customer support',
             btnLabel: 'Sign In',
             complete: status.user && status.present,
+            disabled: status.user && status.present,
             onClick: generateAuthUrl
         },
         {
@@ -95,6 +96,7 @@ const AdminInterface = () => {
             description: 'Customize how your AI assistant looks and behaves',
             btnLabel: 'Design',
             complete: status.design,
+            disabled: status.design || !status.user || !status.present,
             link: `${laxiData.platformUrl}/studio/design`
         },
         {
@@ -103,6 +105,7 @@ const AdminInterface = () => {
             description: 'Add knowledge to make your AI assistant smarter',
             btnLabel: 'Update AI',
             complete: status.data,
+            disabled: status.data || !status.design || !status.user || !status.present,
             link: `${laxiData.platformUrl}/studio/knowledge`
         }
     ];
@@ -147,18 +150,19 @@ const AdminInterface = () => {
                                 {step.onClick ? (
                                     <button
                                         onClick={step.onClick}
-                                        disabled={step.complete}
-                                        className="laxi-auth-button"
+                                        disabled={step.disabled}
+                                        className={`laxi-auth-button ${step.disabled ? 'laxi-button-disabled' : ''}`}
                                     >
                                         <span>{step.btnLabel}</span>
                                         <ExternalLink className="w-4 h-4" />
                                     </button>
                                 ) : (
                                     <a
-                                        href={step.link}
+                                        href={step.disabled ? undefined : step.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="laxi-auth-button"
+                                        className={`laxi-auth-button ${step.disabled ? 'laxi-button-disabled' : ''}`}
+                                        onClick={(e) => step.disabled && e.preventDefault()}
                                     >
                                         <span>{step.btnLabel}</span>
                                         <ExternalLink className="w-4 h-4" />
