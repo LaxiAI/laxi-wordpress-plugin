@@ -137,7 +137,7 @@ const AdminInterface = () => {
                             <div className="step-number">{step.number}</div>
                             <div className="flex-1">
                                 <h3 className="step-title">{step.label}</h3>
-                                <p className="text-gray-600">{step.description}</p>
+                                <p className="text-gray-600 text-sm">{step.description}</p>
                             </div>
                             <div className="flex items-center gap-4">
                                 <span className={`status-icon ${step.complete ? 'status-complete' : 'status-pending'}`}>
@@ -175,17 +175,20 @@ const AdminInterface = () => {
             </div>
 
             {allComplete && (
-                <div className="step-item">
+                <div className="step-item laxi-enable-item">
                     <div className="flex items-center justify-between">
                         <div>
                             <h3 className="step-title">Enable Chatbot</h3>
-                            <p className="text-gray-600">Activate the AI assistant on your store</p>
+                            <p className="text-gray-600 text-sm">Activate the AI assistant on your store</p>
                         </div>
-                        <Switch
-                            checked={isEnabled}
-                            onCheckedChange={toggleChatbot}
-                            className="laxi-switch"
-                        />
+                        <div className="flex items-center gap-3">
+                            <span className="text-sm font-medium">{isEnabled ? 'Active' : 'Inactive'}</span>
+                            <Switch
+                                checked={isEnabled}
+                                onCheckedChange={toggleChatbot}
+                                className="laxi-switch"
+                            />
+                        </div>
                     </div>
                 </div>
             )}

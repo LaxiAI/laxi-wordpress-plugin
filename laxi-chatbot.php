@@ -73,8 +73,8 @@ class Laxi_Ai_Integration {
 
     public function add_admin_menu() {
         add_menu_page(
-            'Laxi AI',
-            'Laxi AI',
+            'laxi.ai',
+            'laxi.ai',
             'manage_options',
             'laxi-ai-for-woocommerce',
             [$this, 'render_admin_page'],
