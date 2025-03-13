@@ -100,6 +100,8 @@ __tests__/__snapshots__/
 *.sql
 *.sqlite
 
+/deploy/*
+
 # Dependency directories for WordPress (if using Composer)
 /vendor/
 
