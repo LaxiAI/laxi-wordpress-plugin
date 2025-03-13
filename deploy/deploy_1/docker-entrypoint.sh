@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-# No need to generate salt values here anymore as they come from environment variables
-
 # Wait for the database to be ready
 if [ ! -z "$WORDPRESS_DB_HOST" ]; then
   WAIT_FOR_DB=30
@@ -33,6 +31,30 @@ if ! wp core is-installed --allow-root; then
   echo "Username: $ADMIN_USER"
   echo "Password: $ADMIN_PASSWORD"
   echo "Please save these credentials!"
+
+  # Set permalink structure to enable REST API
+  echo "Setting permalink structure..."
+  wp rewrite structure '/%postname%/' --allow-root
+  wp rewrite flush --allow-root
+fi
+
+# Check/create .htaccess if needed
+if [ ! -f "/var/www/html/.htaccess" ] || [ ! -s "/var/www/html/.htaccess" ]; then
+  echo "Creating .htaccess file with rewrite rules..."
+  cat > /var/www/html/.htaccess << 'EOF'
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+EOF
+  chown www-data:www-data /var/www/html/.htaccess
+  chmod 644 /var/www/html/.htaccess
 fi
 
 # Install WooCommerce if not already installed
@@ -41,6 +63,10 @@ if [ ! -d "/var/www/html/wp-content/plugins/woocommerce" ]; then
   wp plugin install woocommerce --activate --allow-root
   echo "WooCommerce installed successfully!"
 fi
+
+# Ensure REST API is working
+echo "Testing REST API..."
+curl -I http://localhost/wp-json/ || echo "REST API not responding locally - check after container is fully up"
 
 # Ensure correct ownership
 chown -R www-data:www-data /var/www/html
