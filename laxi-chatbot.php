@@ -20,6 +20,43 @@
 
 if (!defined('ABSPATH')) exit;
 
+// Check if WordPress is running in playground mode
+function laxi_is_playground_mode() {
+    // Check for WordPress Playground specific constant or environment variable
+    if (defined('WP_PLAYGROUND_MODE') && WP_PLAYGROUND_MODE) {
+        return true;
+    }
+
+    // Check for WordPress.org playground URL patterns
+    $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+    if (strpos($host, 'playground.wordpress.net') !== false ||
+        strpos($host, 'wp-playground') !== false ||
+        strpos($host, 'playground.wordpress.org') !== false) {
+        return true;
+    }
+
+    // Check for sandbox URLs or environments
+    if (strpos($host, 'sandbox') !== false ||
+        getenv('WP_SANDBOX_MODE') ||
+        getenv('WP_PLAYGROUND')) {
+        return true;
+    }
+
+    return false;
+}
+
+// Show admin notice if in playground mode
+function laxi_playground_admin_notice() {
+    echo '<div class="error"><p>Laxi AI for WooCommerce cannot be installed in WordPress playground mode. Please use a standard WordPress installation.</p></div>';
+}
+
+// Disable the plugin if in playground mode
+if (laxi_is_playground_mode()) {
+    add_action('admin_notices', 'laxi_playground_admin_notice');
+    // Prevent the rest of the plugin from loading
+    return;
+}
+
 class Laxi_Ai_Integration {
     private const PLUGIN_KEY = 'xDOvESCE2QfM5fzfRtUcyYOH1Rts38u9CwIiy6Z9XfGmuLZvFOgI8pBHK5wLuGe0';
     private const PLATFORM_URL = 'https://laxi.ai';
@@ -366,6 +403,11 @@ class Laxi_Ai_Integration {
 
 // Initialize plugin
 function laxi_init() {
+    // Double-check again for playground mode
+    if (laxi_is_playground_mode()) {
+        return;
+    }
+
     if (!class_exists('WooCommerce')) {
         add_action('admin_notices', function() {
             echo '<div class="error"><p>Laxi AI requires WooCommerce to be installed and active.</p></div>';
@@ -379,6 +421,11 @@ function laxi_init() {
 add_action('plugins_loaded', 'laxi_init');
 
 add_action('before_woocommerce_init', function() {
+    // Skip HPOS compatibility declaration if in playground mode
+    if (laxi_is_playground_mode()) {
+        return;
+    }
+
     if (class_exists('\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
     }
