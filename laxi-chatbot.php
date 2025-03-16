@@ -387,28 +387,60 @@ class Laxi_Ai_Integration {
     }
 
     /**
-     * Clean up existing API keys using proper WooCommerce functions
+     * Cleanup existing WooCommerce API keys for a user
+     *
+     * This function removes existing API keys from the database and clears associated caches.
+     * It follows WordPress best practices by properly sanitizing inputs and managing cache.
+     *
+     * @param int    $user_id        The user ID to clean up keys for
+     * @param string $description    Optional. The description to match. Default empty (all keys).
+     * @param bool   $delete_all     Optional. Whether to delete all keys or only matching descriptions. Default false.
+     * @return int   Number of keys deleted
      */
-    private function cleanup_existing_keys() {
-        $existing_key_id = get_option('laxi_wc_api_key_id');
+   function cleanup_existing_keys($user_id, $description = '', $delete_all = false) {
+        global $wpdb;
 
-        if ($existing_key_id) {
-            // Use the WooCommerce function to delete API keys if available
-            if (function_exists('wc_delete_api_key')) {
-                wc_delete_api_key($existing_key_id);
-                delete_option('laxi_wc_api_key_id');
-            } else {
-                // Fallback to WordPress functions
-                global $wpdb;
-                $wpdb->delete(
-                    $wpdb->prefix . 'woocommerce_api_keys',
-                    array('key_id' => $existing_key_id),
-                    array('%d')
-                );
-                delete_option('laxi_wc_api_key_id');
-            }
+        // Sanitize inputs
+        $user_id = absint($user_id);
+        $description = sanitize_text_field(wp_unslash($description));
+
+        // Prepare query conditions
+        $conditions = array('user_id' => $user_id);
+        $types = array('%d');
+
+        // Add description condition if not deleting all
+        if (!$delete_all && !empty($description)) {
+            $conditions['description'] = $description;
+            $types[] = '%s';
         }
-    }
+
+        $key_ids = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT key_id FROM {$wpdb->prefix}woocommerce_api_keys WHERE " .
+                implode(' AND ', array_map(function($key) { return "$key = %s"; }, array_keys($conditions))),
+                array_values($conditions)
+            )
+        );
+
+        // Delete the keys
+        $deleted = $wpdb->delete(
+            $wpdb->prefix . 'woocommerce_api_keys',
+            $conditions,
+            $types
+        );
+
+        // Clear cache for each deleted key
+        if (!empty($key_ids)) {
+            foreach ($key_ids as $key_id) {
+                wp_cache_delete('wc_api_key_' . $key_id, 'woocommerce_api_keys');
+            }
+
+            // Also clear any user-related API key caches
+            wp_cache_delete('wc_api_keys_user_' . $user_id, 'woocommerce_api_keys');
+        }
+
+        return $deleted;
+   }
 
     // Add this new method to declare HPOS compatibility
     public static function declare_hpos_compatibility() {
