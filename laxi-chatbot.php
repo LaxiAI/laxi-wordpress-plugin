@@ -224,7 +224,7 @@ class Laxi_Ai_Integration {
             return;
         }
 
-        // Generate description with timestamp for uniqueness
+        /* translators: %s: timestamp of when the API key was created (in MySQL datetime format) */
         $description = sprintf(__('laxi.ai Integration - Created %s', 'laxi-ai-for-woocommerce'), current_time('mysql'));
 
         // Create API keys using proper WooCommerce function
