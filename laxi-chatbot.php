@@ -28,7 +28,7 @@ function laxi_is_playground_mode() {
     }
 
     // Check for WordPress.org playground URL patterns
-    $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+    $host = isset($_SERVER['HTTP_HOST']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) : '';
     if (strpos($host, 'playground.wordpress.net') !== false ||
         strpos($host, 'wp-playground') !== false ||
         strpos($host, 'playground.wordpress.org') !== false) {
@@ -326,6 +326,23 @@ class Laxi_Ai_Integration {
                 $consumer_key = 'ck_' . wp_generate_password(12, false);
                 $consumer_secret = 'cs_' . wp_generate_password(32, false);
             }
+
+            /**
+             * Note about $wpdb direct usage with WooCommerce API keys
+             *
+             * While WordPress best practices discourage using $wpdb directly for core tables
+             * (posts, users, etc.) in favor of WordPress API functions, the WooCommerce API keys
+             * table is a custom table created by WooCommerce. Therefore, direct $wpdb methods
+             * are appropriate in this case.
+             *
+             * For WordPress core tables, you should use functions like:
+             * - wp_insert_post(), wp_update_post(), wp_delete_post() for posts
+             * - add_user_meta(), update_user_meta(), delete_user_meta() for user meta
+             *
+             * But for custom plugin tables like 'woocommerce_api_keys', direct $wpdb
+             * methods are acceptable since no WordPress API functions exist for them.
+             */
+
 
             // Insert the new API key into the database
             $wpdb->insert(
