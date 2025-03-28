@@ -4,9 +4,9 @@
 
 /* Custom styles for WordPress admin integration */
 #laxi-admin-root {
-    max-width: 720px;
-    margin: 3rem auto;
-    padding: 0 2rem;
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -14,325 +14,82 @@
 :root {
     --laxi-primary: #662D91;
     --laxi-primary-dark: #55267A;
-    --laxi-primary-light: #7A42A8;
-    --laxi-gradient: linear-gradient(135deg, #7a5af8, #662D91);
-    --laxi-gradient-hover: linear-gradient(135deg, #8a6af9, #7A42A8);
-    --text-primary: #1a1a1a;
-    --text-secondary: #666666;
-    --background: #f9fafb;
+    --laxi-primary-hover: #7A42A8;
+    --text-primary: #111827;
+    --text-secondary: #4B5563;
+    --background: #F9FAFB;
     --card-background: #ffffff;
-    --success: #22c55e;
-    --error: #ef4444;
-    --border: #e5e7eb;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.04), 0 4px 6px rgba(0, 0, 0, 0.05);
-    --disabled: #d1d5db;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
+    --border: #E5E7EB;
 }
 
-/* Container for everything */
-.laxi-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+/* WordPress Admin specific overrides */
+.wp-admin #laxi-admin-root h1,
+.wp-admin #laxi-admin-root h2,
+.wp-admin #laxi-admin-root h3,
+.wp-admin #laxi-admin-root p {
+    margin: 2px;
+    padding: 2px;
 }
 
-/* Header with Logo */
-.laxi-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem;
-    background: var(--card-background);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.laxi-logo {
-    height: 2.5rem;
-    width: auto;
-    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
-}
-
-/* Main card containing all controls */
-.laxi-main-card {
-    background: var(--card-background);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.laxi-card-header {
-    padding: 1.5rem;
-    background: linear-gradient(to right, rgba(102, 45, 145, 0.05), transparent);
-    border-bottom: 1px solid var(--border);
-}
-
-.laxi-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
-}
-
-.laxi-subtitle {
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-}
-
-/* Status indicators */
-.laxi-status-container {
-    padding: 1.5rem;
-}
-
-.laxi-status-indicators {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-}
-
-.laxi-status-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.laxi-status-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.03);
-}
-
-.laxi-status-complete {
-    color: var(--success);
-    background: rgba(34, 197, 94, 0.1);
-}
-
-.laxi-status-pending {
-    color: var(--text-secondary);
-}
-
-.laxi-status-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-primary);
-}
-
-/* Divider */
-.laxi-divider {
-    height: 1px;
-    background-color: var(--border);
-    margin: 0;
-}
-
-/* Toggle container */
-.laxi-toggle-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-}
-
-.laxi-toggle-content {
-    flex: 1;
-}
-
-.laxi-toggle-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
-}
-
-.laxi-toggle-description {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-}
-
-.laxi-toggle-control {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.laxi-toggle-status {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-/* Action hints */
-.laxi-action-hint {
-    padding: 1rem 1.5rem;
-    background-color: rgba(102, 45, 145, 0.05);
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    border-top: 1px solid var(--border);
-    text-align: center;
-}
-
-.laxi-text-link {
-    color: var(--laxi-primary);
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    margin-top: 0.5rem;
-}
-
-.laxi-text-link:hover {
-    text-decoration: underline;
-}
-
-/* Auth Button */
-.laxi-auth-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    background: var(--laxi-gradient);
-    color: white;
-    padding: 0.625rem 1.25rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: 0.875rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
+.wp-admin #laxi-admin-root button {
     border: none;
     cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    letter-spacing: 0.01em;
-    min-width: 120px;
-    white-space: nowrap;
+    outline: none;
 }
 
-.laxi-auth-button:hover {
-    background: var(--laxi-gradient-hover);
-    transform: translateY(-1px);
+/* Animation for loader */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-.laxi-auth-button:active {
-    transform: translateY(0);
+.animate-spin {
+    animation: spin 1s linear infinite;
 }
 
-.laxi-button-secondary {
-    background: white;
-    color: var(--laxi-primary);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-}
-
-.laxi-button-secondary:hover {
-    background: #f9fafb;
-    color: var(--laxi-primary-dark);
-}
-
-/* Premium Toggle Switch styling */
-.laxi-switch {
-    --switch-width: 3.5rem;
-    --switch-height: 1.75rem;
-    --thumb-size: 1.375rem;
-    --thumb-margin: 0.1875rem;
-
+/* Switch styling */
+.switch-root {
     position: relative;
-    width: var(--switch-width);
-    height: var(--switch-height);
+    width: 42px;
+    height: 25px;
+    background-color: #E5E7EB;
     border-radius: 999px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: rgba(226, 232, 240, 0.6);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow:
-            inset 0 1px 2px rgba(0, 0, 0, 0.06),
-            0 1px 0 rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(4px);
+    transition: background-color 0.2s;
 }
 
-/* Thumb styling */
-.laxi-switch .switch-primitive-thumb {
-    width: var(--thumb-size);
-    height: var(--thumb-size);
-    background: white;
-    border-radius: 50%;
-    display: block;
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    will-change: transform;
-    box-shadow:
-            0 2px 5px rgba(0, 0, 0, 0.1),
-            0 1px 2px rgba(0, 0, 0, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.9);
-    margin: var(--thumb-margin);
+.switch-root[data-state="checked"] {
+    background-color: var(--laxi-primary);
 }
 
-/* Active state styling */
-.laxi-switch[data-state="checked"] {
-    background: var(--laxi-gradient);
-    border-color: rgba(102, 45, 145, 0.3);
-    box-shadow:
-            inset 0 1px 2px rgba(0, 0, 0, 0.1),
-            0 0 8px rgba(122, 90, 248, 0.15);
-}
-
-.laxi-switch[data-state="checked"] .switch-primitive-thumb {
-    transform: translateX(calc(var(--switch-width) - var(--thumb-size) - 2*var(--thumb-margin)));
-    border-color: white;
-}
-
-/* Hover effects */
-.laxi-switch:not(.laxi-switch-disabled):hover {
-    background-color: rgba(226, 232, 240, 0.8);
-}
-
-.laxi-switch[data-state="checked"]:not(.laxi-switch-disabled):hover {
-    background: linear-gradient(135deg, #8b6af8, #7942a8);
-}
-
-/* Focus styles */
-.laxi-switch:focus-visible {
-    outline: 2px solid rgba(102, 45, 145, 0.5);
+.switch-root:focus {
+    outline: 2px solid rgba(102, 45, 145, 0.3);
     outline-offset: 2px;
 }
 
-/* Disabled state */
-.laxi-switch-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(30%);
+.switch-thumb {
+    display: block;
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    transform: translateX(2px);
 }
 
-/* Responsive design */
-@media (max-width: 640px) {
+.switch-root[data-state="checked"] .switch-thumb {
+    transform: translateX(19px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
     #laxi-admin-root {
-        margin: 1.5rem;
+        max-width: 100%;
+        margin: 1rem;
         padding: 0;
-    }
-
-    .laxi-header {
-        padding: 1.25rem;
-    }
-
-    .laxi-status-indicators {
-        flex-wrap: wrap;
-        justify-content: space-around;
-    }
-
-    .laxi-toggle-container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-
-    .laxi-toggle-control {
-        width: 100%;
-        justify-content: space-between;
     }
 }

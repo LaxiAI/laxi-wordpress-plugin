@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import AdminInterface from './components/AdminInterface';
+import 'antd/dist/reset.css';
 import '../styles/admin.css';
 
 // Wait for DOM to be ready
