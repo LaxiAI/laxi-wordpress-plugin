@@ -70,10 +70,25 @@ class Laxi_Ai_Integration {
         add_action('wp_ajax_laxi_toggle_chatbot', [$this, 'ajax_toggle_chatbot']);
         add_action('wp_ajax_laxi_auth', [$this, 'generate_auth_url']);
 
+        // Add this new AJAX endpoint
+        add_action('wp_ajax_laxi_get_chatbot_status', [$this, 'ajax_get_chatbot_status']);
+
         // Frontend script injection
         if (get_option('laxi_chatbot_enabled', '0') === '1') {
             add_action('wp_footer', [$this, 'inject_chatbot_script']);
         }
+    }
+
+    /**
+     * Ajax handler to get current chatbot status
+     */
+    public function ajax_get_chatbot_status() {
+        check_ajax_referer('laxi_admin');
+
+        // Get the current enabled state from options
+        $enabled = get_option('laxi_chatbot_enabled', '0') === '1';
+
+        wp_send_json_success(['enabled' => $enabled]);
     }
 
 
