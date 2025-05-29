@@ -65,6 +65,9 @@ Yes, through the Laxi dashboard you can configure which pages the chatbot appear
 = 1.0.3 =
 * New UI design
 
+= 1.0.2 =
+* New Api Keys management
+
 == External Services ==
 
 This plugin connects to the Laxi AI platform to provide AI-powered chatbot functionality for your WooCommerce store. These connections are necessary for the core features of the plugin to work.

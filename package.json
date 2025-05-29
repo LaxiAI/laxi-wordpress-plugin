@@ -1,6 +1,6 @@
 {
   "name": "laxi-woocommerce",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Laxi AI WooCommerce Integration",
   "scripts": {
     "build": "webpack --mode production",
