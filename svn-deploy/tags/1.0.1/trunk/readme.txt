@@ -3,7 +3,7 @@ Contributors: laxi
 Tags: woocommerce, ai, chatbot, customer support, product recommendations
 Requires at least: 5.6
 Tested up to: 6.7
-Stable tag: 1.0.3
+Stable tag: 1.0.1
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -62,7 +62,7 @@ Yes, through the Laxi dashboard you can configure which pages the chatbot appear
 = 1.0.0 =
 * Initial release
 
-= 1.0.3 =
+= 1.0.1 =
 * New UI design
 
 == External Services ==
